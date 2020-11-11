@@ -47,9 +47,8 @@ px4_add_board(
 		rpm
 		safety_button
 		telemetry # all available telemetry drivers
-		#test_ppm # NOT Portable YET
 		tone_alarm
-		#uavcannode_v1
+		uavcan_v1
 	MODULES
 		airspeed_selector
 		attitude_estimator_q

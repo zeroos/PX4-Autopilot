@@ -47,7 +47,6 @@ px4_add_board(
 		rpm
 		safety_button
 		telemetry # all available telemetry drivers
-		#test_ppm # NOT Portable YET
 		tone_alarm
 		uavcan
 	MODULES
