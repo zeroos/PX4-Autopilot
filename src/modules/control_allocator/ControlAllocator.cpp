@@ -386,8 +386,11 @@ ControlAllocator::publish_actuator_setpoint()
 	outputs.timestamp = vehicle_actuator_setpoint.timestamp;
 	outputs.timestamp_sample = _timestamp_sample;
 
+	// Note: We must use the normalized values in the range [-1, 1]
+	auto actuator_sp_normalized = _control_allocation->normalizeActuatorSetpoint(actuator_sp);
+
 	for (unsigned i = 0; i < NUM_ACTUATORS; i++) {
-		outputs.value[i] = vehicle_actuator_setpoint.actuator[i];
+		outputs.value[i] = actuator_sp_normalized(i);
 	}
 
 	_output_control_pub.publish(outputs);
