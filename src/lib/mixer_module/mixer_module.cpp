@@ -471,7 +471,7 @@ bool MixingOutput::update()
 				/* Set all controls to 0 */
 				memset(&_mixer_controls[i], 0, sizeof(_mixer_controls[i]));
 
-				/* except thrust to maximum. */
+				/* except thrust; set that to maximum. */
 				_mixer_controls[i].control[actuator_controls_s::INDEX_THROTTLE] = 1.0f;
 
 				/* Switch off the output limit ramp for the calibration. */
@@ -480,7 +480,7 @@ bool MixingOutput::update()
 		}
 	}
 
-	/* do mixing */
+	/* Do mixing (From mixer files) */
 	float mixer_outputs[MAX_ACTUATORS] {};
 
 	unsigned mixed_num_outputs = 0;
@@ -489,10 +489,7 @@ bool MixingOutput::update()
 		mixed_num_outputs = _mixers->mix(mixer_outputs, _max_num_outputs);
 	}
 
-	// Mask of all channels to be output; initialze to all mixed channels
-	unsigned mixed_outputs_mask = (1 << mixed_num_outputs) - 1;
-
-	/* get output controls for required topics */
+	/* Get output controls for required topics */
 
 	for (unsigned i = 0; i < output_control_s::NUM_OUTPUT_CONTROL_GROUPS; i++) {
 		const unsigned grp = n_act + i;
@@ -504,8 +501,7 @@ bool MixingOutput::update()
 		}
 	}
 
-	// Map the current control function to the correct output(s)
-	/// TODO: Only update values if not NAN
+	/* Map the current control function to the correct output(s) */
 	for (unsigned i = 0; i < _max_num_outputs; i++) {
 		const int32_t func = _assigned_function[i];
 		float val = NAN;
@@ -541,11 +537,12 @@ bool MixingOutput::update()
 
 		if (PX4_ISFINITE(val)) {
 			_current_inputs[i] = val;
-			mixed_outputs_mask |= (1 << i);
 			mixed_num_outputs = (i >= mixed_num_outputs) ? (i + 1) : mixed_num_outputs;
 		}
 	}
 
+	/// TODO: Not highly necessary, but if controlling a MAVLink servo, gimbal, etc. and not
+	///       controlling any motors, set _output_limit.state = OUTPUT_LIMIT_STATE_ON
 
 	/* the output limit call takes care of out of band errors, NaN and constrains */
 	output_limit_calc(_throttle_armed, armNoThrottle(), _max_num_outputs, _reverse_output_mask,
