@@ -146,6 +146,7 @@ function(px4_add_board)
 			LABEL
 			TOOLCHAIN
 			ARCHITECTURE
+			NUTTX_CONFIG
 			ROMFSROOT
 			IO
 			BOOTLOADER
