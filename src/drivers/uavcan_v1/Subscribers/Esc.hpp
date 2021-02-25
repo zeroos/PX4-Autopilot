@@ -97,6 +97,8 @@ public:
 		// FUNCTION_MC_MOTOR{1-8} will accept these values
 		output_control_s outputs;
 
+		outputs.timestamp = hrt_absolute_time();
+
 		for (uint8_t i = 0; i < 8; i++) {
 			outputs.value[i] = 2.f * (esc.value[i] / 8191.f) - 1.f;
 		}
