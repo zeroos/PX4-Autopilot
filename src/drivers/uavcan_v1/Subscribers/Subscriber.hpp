@@ -65,6 +65,8 @@ public:
 
 	CanardPortID id() { return _port_id; };
 
+	virtual bool handlesID(const CanardPortID &id) = 0;
+
 	void updateParam()
 	{
 		char uavcan_param[256];

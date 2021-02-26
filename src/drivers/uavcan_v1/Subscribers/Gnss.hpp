@@ -52,6 +52,11 @@ public:
 	UavcanGnssSubscriber(CanardInstance &ins, UavcanParamManager &pmgr, uint8_t instance = 0) :
 		UavcanSubscriber(ins, pmgr, "gps", instance) { };
 
+	bool handlesID(const CanardPortID &id)
+	{
+		return id == _port_id;
+	}
+
 	void subscribe() override
 	{
 		// Subscribe to messages reg.drone.physics.kinematics.geodetic.Point.0.1

@@ -367,7 +367,7 @@ void UavcanNode::Run()
 			} else if (receive.port_id > 0) {
 				// If not a fixed port ID, check any subscribers which may have registered it
 				for (auto &subscriber : _subscribers) {
-					if (receive.port_id == subscriber->id()) {
+					if (subscriber->handlesID(receive.port_id)) {
 						subscriber->callback(receive);
 					}
 				}

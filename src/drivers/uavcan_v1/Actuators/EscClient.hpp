@@ -68,7 +68,11 @@ public:
 	static constexpr int MAX_ACTUATORS = MixingOutput::MAX_ACTUATORS;
 
 	UavcanEscController(CanardInstance &ins, UavcanParamManager &pmgr) :
-		UavcanPublisher(ins, pmgr, "esc") { };
+		UavcanPublisher(ins, pmgr, "esc")
+	{
+		_armed.prearmed = false;
+		_armed.armed = false;
+	};
 
 	~UavcanEscController() {};
 
@@ -78,11 +82,11 @@ public:
 			actuator_armed_s new_arming;
 			_armed_sub.update(&new_arming);
 
-			if (new_arming.armed != _armed.armed) {
+			if (new_arming.prearmed != _armed.prearmed || new_arming.armed != _armed.armed) {
 				_armed = new_arming;
 
 				// Only publish if we have a valid publication ID set
-				if (_port_id == 0) {
+				if (_port_id == CANARD_PORT_ID_UNSET) {
 					return;
 				}
 

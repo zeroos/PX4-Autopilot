@@ -53,6 +53,11 @@ public:
 	UavcanBmsSubscriber(CanardInstance &ins, UavcanParamManager &pmgr, uint8_t instance = 0) :
 		UavcanSubscriber(ins, pmgr, "bms", instance) { };
 
+	bool handlesID(const CanardPortID &id)
+	{
+		return id == _port_id;
+	}
+
 	void subscribe() override
 	{
 		// Subscribe to messages reg.drone.service.battery.Status.0.1
