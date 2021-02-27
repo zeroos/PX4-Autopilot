@@ -58,6 +58,7 @@ public:
 	{
 		_arming_pub.get().prearmed = false;
 		_arming_pub.get().armed = false;
+		_arming_pub.get().timestamp = hrt_absolute_time();
 		_arming_pub.update();
 	};
 
@@ -145,6 +146,7 @@ public:
 			if (armed.prearmed != _arming_pub.get().prearmed || armed.armed != _arming_pub.get().armed) {
 				_arming_pub.get().prearmed = armed.prearmed;
 				_arming_pub.get().armed = armed.armed;
+				_arming_pub.get().timestamp = hrt_absolute_time();
 				_arming_pub.update();
 			}
 		}
