@@ -1,4 +1,4 @@
-
+# TODO: Apply to UAVCAN v1 node
 # UAVCAN boot loadable Module ID
 # set(uavcanblid_sw_version_major 0)
 # set(uavcanblid_sw_version_minor 1)
@@ -16,7 +16,6 @@
 # 	-DHW_VERSION_MAJOR=${uavcanblid_hw_version_major}
 # 	-DHW_VERSION_MINOR=${uavcanblid_hw_version_minor}
 # )
-message("Config CANNode-V1")
 
 px4_add_board(
 	PLATFORM nuttx
@@ -72,7 +71,7 @@ px4_add_board(
 		#rc_input
 		#roboclaw
 		safety_button
-		tap_esc
+		#tap_esc
 		telemetry # all available telemetry drivers
 		#test_ppm
 		#tone_alarm

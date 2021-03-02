@@ -481,12 +481,11 @@ bool MixingOutput::update()
 	}
 
 	/* Do mixing (From mixer files) */
-	float mixer_outputs[MAX_ACTUATORS] {};
 
 	unsigned mixed_num_outputs = 0;
 
 	if (_mixers) {
-		mixed_num_outputs = _mixers->mix(mixer_outputs, _max_num_outputs);
+		mixed_num_outputs = _mixers->mix(_mixer_outputs, _max_num_outputs);
 	}
 
 	/* Get output controls for required topics */
@@ -506,8 +505,8 @@ bool MixingOutput::update()
 		const int32_t func = _assigned_function[i];
 		float val = NAN;
 
-		if (func == output_control_s::FUNCTION_MIXER) {
-			val = mixer_outputs[i];
+		if (func == output_control_s::FUNCTION_MIXER && _mixers) {
+			val = _mixer_outputs[i];
 
 		} else if (func >= output_control_s::FUNCTION_CA0 &&
 			   func <= output_control_s::FUNCTION_CA15) {
