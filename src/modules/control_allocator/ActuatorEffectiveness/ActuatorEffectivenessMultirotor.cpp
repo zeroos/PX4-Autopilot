@@ -58,8 +58,6 @@ ActuatorEffectivenessMultirotor::getEffectivenessMatrix(matrix::Matrix<float, NU
 		updateParams();
 		_updated = false;
 
-		PX4_INFO("Configuring ActuatorEffectivenessMultirotor via parameters"); /// DEBUGGING
-
 		// Get multirotor geometry
 		MultirotorGeometry geometry = {};
 		geometry.rotors[0].position_x = _param_ca_mc_r0_px.get();
