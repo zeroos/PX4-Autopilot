@@ -169,7 +169,7 @@ void Magnetometer::ParametersUpdate()
 			set_rotation(static_cast<Rotation>(rotation_value));
 
 		} else {
-			// internal mag, CAL_MAGx_ROT -1
+			// internal, CAL_MAGx_ROT -1
 			if (rotation_value != -1) {
 				PX4_ERR("Internal %s %d (%d) invalid rotation %d, resetting",
 					SensorString(), _device_id, _calibration_index, rotation_value);
