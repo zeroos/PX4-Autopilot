@@ -57,6 +57,7 @@ px4_add_board(
 		test_ppm
 		tone_alarm
 		uavcan
+		vesc
 	MODULES
 		airspeed_selector
 		attitude_estimator_q
@@ -94,7 +95,7 @@ px4_add_board(
 		vtol_att_control
 	SYSTEMCMDS
 		bl_update
-		#dmesg
+		dmesg
 		dumpfile
 		esc_calib
 		gpio
