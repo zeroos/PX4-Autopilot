@@ -41,6 +41,7 @@
 #include <drivers/drv_rc_input.h>
 #include <lib/perf/perf_counter.h>
 #include <lib/rc/crsf.h>
+#include <lib/rc/ghst.hpp>
 #include <lib/rc/dsm.h>
 #include <lib/rc/sbus.h>
 #include <lib/rc/st24.h>
@@ -57,6 +58,7 @@
 #include <uORB/topics/vehicle_command.h>
 
 #include "crsf_telemetry.h"
+#include "ghst_telemetry.hpp"
 
 #ifdef HRT_PPM_CHANNEL
 # include <systemlib/ppm_decode.h>
@@ -93,16 +95,18 @@ private:
 		RC_SCAN_DSM,
 		RC_SCAN_SUMD,
 		RC_SCAN_ST24,
-		RC_SCAN_CRSF
+		RC_SCAN_CRSF,
+		RC_SCAN_GHST
 	} _rc_scan_state{RC_SCAN_SBUS};
 
-	static constexpr char const *RC_SCAN_STRING[6] {
+	static constexpr char const *RC_SCAN_STRING[7] {
 		"PPM",
 		"SBUS",
 		"DSM",
 		"SUMD",
 		"ST24",
-		"CRSF"
+		"CRSF",
+		"GHST"
 	};
 
 	hrt_abstime _rc_scan_begin{0};
@@ -132,6 +136,7 @@ private:
 	uint16_t _raw_rc_count{};
 
 	CRSFTelemetry *_crsf_telemetry{nullptr};
+	GHSTTelemetry *_ghst_telemetry{nullptr};
 
 	perf_counter_t      _cycle_perf;
 	perf_counter_t      _publish_interval_perf;
