@@ -17,5 +17,5 @@ pwm_out sensor_reset 50
 ms5611 -s start
 
 # hmc5883 internal SPI bus is rotated 90 deg yaw
-hmc5883 -T -s -R 2 start
+hmc5883 -T -s -R 14 start
 mpu9250 -s -R 0 start
