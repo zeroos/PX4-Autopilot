@@ -229,17 +229,18 @@ then
       simulator start -c $simulator_tcp_port
     else
       echo "PX4 SIM HOST: $PX4_SIM_HOST_ADDR"
-      simulator start -t $PX4_SIM_HOST_ADDR $simulator_tcp_port 
+      simulator start -t $PX4_SIM_HOST_ADDR $simulator_tcp_port
     fi
   else
     echo "PX4 SIM HOST: $PX4_SIM_HOSTNAME"
-    simulator start -h $PX4_SIM_HOSTNAME $simulator_tcp_port 
+    simulator start -h $PX4_SIM_HOSTNAME $simulator_tcp_port
   fi
 fi
 load_mon start
 battery_simulator start
 tone_alarm start
 rc_update start
+manual_control start
 sensors start
 commander start
 navigator start
