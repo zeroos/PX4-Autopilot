@@ -10,7 +10,6 @@ px4_add_board(
 	ARCHITECTURE cortex-a53
 	ROMFSROOT px4fmu_common
 	TOOLCHAIN arm-linux-gnueabihf
-	TESTING
 	DRIVERS
 		adc/ads1115
 		#barometer # all available barometer drivers
@@ -82,7 +81,6 @@ px4_add_board(
 		#serial_test
 		system_time
 		shutdown
-		tests # tests and test runner
 		#top
 		topic_listener
 		tune_control
