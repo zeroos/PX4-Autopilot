@@ -42,8 +42,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define debug(fmt, args...)	do { } while(0)
-//#define debug(fmt, args...)	do { printf("[mixer] " fmt "\n", ##args); } while(0)
+#ifdef CONSTRAINED_FLASH
+#define debug(fmt, args...) do { } while(0)
+#else
+#define debug(fmt, args...) do { printf("[mixer] " fmt "\n", ##args); } while(0)
+#endif
 
 SimpleMixer::SimpleMixer(ControlCallback control_cb, uintptr_t cb_handle, mixer_simple_s *mixinfo) :
 	Mixer(control_cb, cb_handle),

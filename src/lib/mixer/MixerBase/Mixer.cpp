@@ -43,8 +43,11 @@
 #include <cstring>
 #include <ctype.h>
 
-#define debug(fmt, args...)	do { } while(0)
-//#define debug(fmt, args...)	do { printf("[mixer] " fmt "\n", ##args); } while(0)
+#ifdef CONSTRAINED_FLASH
+#define debug(fmt, args...) do { } while(0)
+#else
+#define debug(fmt, args...) do { printf("[mixer] " fmt "\n", ##args); } while(0)
+#endif
 
 float
 Mixer::get_control(uint8_t group, uint8_t index)

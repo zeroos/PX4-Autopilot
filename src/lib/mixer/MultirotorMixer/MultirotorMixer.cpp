@@ -73,11 +73,11 @@ const char *_config_key[] = {"4x"};
 
 #endif /* MIXER_MULTIROTOR_USE_MOCK_GEOMETRY */
 
-
-#define debug(fmt, args...)	do { } while(0)
-//#define debug(fmt, args...)	do { printf("[mixer] " fmt "\n", ##args); } while(0)
-//#include <debug.h>
-//#define debug(fmt, args...)	syslog(fmt "\n", ##args)
+#ifdef CONSTRAINED_FLASH
+#define debug(fmt, args...) do { } while(0)
+#else
+#define debug(fmt, args...) do { printf("[mixer] " fmt "\n", ##args); } while(0)
+#endif
 
 MultirotorMixer::MultirotorMixer(ControlCallback control_cb, uintptr_t cb_handle, MultirotorGeometry geometry) :
 	MultirotorMixer(control_cb, cb_handle, _config_index[(int)geometry], _config_rotor_count[(int)geometry])

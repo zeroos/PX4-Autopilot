@@ -43,10 +43,11 @@
 #include <cstdio>
 #include <px4_platform_common/defines.h>
 
-#define debug(fmt, args...)	do { } while(0)
-//#define debug(fmt, args...)	do { printf("[mixer] " fmt "\n", ##args); } while(0)
-//#include <debug.h>
-//#define debug(fmt, args...)	lowsyslog(fmt "\n", ##args)
+#ifdef CONSTRAINED_FLASH
+#define debug(fmt, args...) do { } while(0)
+#else
+#define debug(fmt, args...) do { printf("[mixer] " fmt "\n", ##args); } while(0)
+#endif
 
 using math::constrain;
 

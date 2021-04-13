@@ -45,10 +45,11 @@
 #include "NullMixer/NullMixer.hpp"
 #include "SimpleMixer/SimpleMixer.hpp"
 
-#define debug(fmt, args...)	do { } while(0)
-//#define debug(fmt, args...)	do { printf("[mixer] " fmt "\n", ##args); } while(0)
-//#include <debug.h>
-//#define debug(fmt, args...)	syslog(fmt "\n", ##args)
+#ifdef CONSTRAINED_FLASH
+#define debug(fmt, args...) do { } while(0)
+#else
+#define debug(fmt, args...) do { printf("[mixer] " fmt "\n", ##args); } while(0)
+#endif
 
 unsigned
 MixerGroup::mix(float *outputs, unsigned space)
