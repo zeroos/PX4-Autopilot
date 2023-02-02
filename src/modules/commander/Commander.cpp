@@ -1672,6 +1672,8 @@ void Commander::run()
 
 		safetyButtonUpdate();
 
+		throwLaunchUpdate();
+
 		vtolStatusUpdate();
 
 		_home_position.update(_param_com_home_en.get(), !_arm_state_machine.isArmed() && _vehicle_land_detected.landed);
@@ -2015,6 +2017,44 @@ void Commander::safetyButtonUpdate()
 		}
 
 		_status_changed = true;
+	}
+}
+
+void Commander::throwLaunchUpdate()
+{
+	//TODO add tunes
+	bool throw_launch_enabled = true;
+	static int timer = 0;
+	if(throw_launch_enabled) {
+		if (!_arm_state_machine.isArmed() && _throw_mode_state != ThrowModeState::IDLE) {
+			PX4_INFO("%s [Throw] %s DISARMED!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
+			_throw_mode_state = ThrowModeState::IDLE;
+			_actuator_armed.lockdown = false;
+		}
+
+		if(_throw_mode_state == ThrowModeState::IDLE && _arm_state_machine.isArmed()) {
+			PX4_INFO("%s [Throw] %s ARMED!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
+			_throw_mode_state = ThrowModeState::ARMED;
+			_actuator_armed.lockdown = true;
+		}
+
+		if(_throw_mode_state == ThrowModeState::ARMED && _vehicle_land_detected.freefall) {
+			PX4_INFO("%s [Throw] %s FLYING!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
+			_throw_mode_state = ThrowModeState::FLYING;
+			_actuator_armed.lockdown = false;
+		}
+		if(timer == 0) {
+			PX4_INFO(
+				"%s [Throw] %s %x|%x|%x",
+				PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET,
+				(int)_throw_mode_state,
+				_actuator_armed.manual_lockdown,
+				_actuator_armed.lockdown
+			);
+			timer = 50;
+		}else{
+			timer--;
+		}
 	}
 }
 

@@ -167,6 +167,8 @@ private:
 
 	void safetyButtonUpdate();
 
+	void throwLaunchUpdate();
+
 	void vtolStatusUpdate();
 
 	void updateTunes();
@@ -192,6 +194,12 @@ private:
 	enum class RcOverrideBits : int32_t {
 		AUTO_MODE_BIT = (1 << 0),
 		OFFBOARD_MODE_BIT = (1 << 1),
+	};
+
+	enum class ThrowModeState {
+		IDLE = 0,
+		ARMED = 1,
+		FLYING = 2
 	};
 
 	/* Decouple update interval and hysteresis counters, all depends on intervals */
@@ -258,6 +266,7 @@ private:
 	bool _was_armed{false};
 	bool _have_taken_off_since_arming{false};
 	bool _status_changed{true};
+    ThrowModeState _throw_mode_state{ThrowModeState::IDLE};
 
 	vehicle_land_detected_s	_vehicle_land_detected{};
 
