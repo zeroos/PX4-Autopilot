@@ -2197,7 +2197,7 @@ void Commander::handleAutoDisarm()
 				disarm(arm_disarm_reason_t::kill_switch, true);
 
 			} else {
-				disarm(arm_disarm_reason_t::lockdown, true);
+				//disarm(arm_disarm_reason_t::lockdown, true);
 			}
 		}
 
