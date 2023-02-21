@@ -2028,9 +2028,8 @@ void Commander::safetyButtonUpdate()
 void Commander::throwLaunchUpdate()
 {
 	//TODO add tunes
-	bool throw_launch_enabled = true;
 	static int timer = 0;
-	if(throw_launch_enabled) {
+	if(_param_com_throw_en.get()) {
 		if (!_arm_state_machine.isArmed() && _throw_mode_state != ThrowModeState::IDLE) {
 			PX4_INFO("%s [Throw] %s DISARMED!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
 			_throw_mode_state = ThrowModeState::IDLE;

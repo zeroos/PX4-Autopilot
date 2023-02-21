@@ -1105,3 +1105,13 @@ PARAM_DEFINE_FLOAT(COM_WIND_MAX, -1.f);
  * @unit m
  */
 PARAM_DEFINE_FLOAT(COM_POS_LOW_EPH, -1.0f);
+
+/**
+ * Enable throw-start
+ *
+ * Allows to start the vehicle by throwing it into the air.
+ *
+ * @group Commander
+ * @boolean
+ */
+PARAM_DEFINE_INT32(COM_THROW_EN, 0);
