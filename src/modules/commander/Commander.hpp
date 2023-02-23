@@ -266,7 +266,7 @@ private:
 	bool _was_armed{false};
 	bool _have_taken_off_since_arming{false};
 	bool _status_changed{true};
-    ThrowLaunchState _throw_launch_state{ThrowLaunchState::IDLE};
+	ThrowLaunchState _throw_launch_state{ThrowLaunchState::IDLE};
 
 	vehicle_land_detected_s	_vehicle_land_detected{};
 
