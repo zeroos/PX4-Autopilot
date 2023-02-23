@@ -196,7 +196,7 @@ private:
 		OFFBOARD_MODE_BIT = (1 << 1),
 	};
 
-	enum class ThrowModeState {
+	enum class ThrowLaunchState {
 		IDLE = 0,
 		ARMED = 1,
 		FLYING = 2
@@ -266,7 +266,7 @@ private:
 	bool _was_armed{false};
 	bool _have_taken_off_since_arming{false};
 	bool _status_changed{true};
-    ThrowModeState _throw_mode_state{ThrowModeState::IDLE};
+    ThrowLaunchState _throw_launch_state{ThrowLaunchState::IDLE};
 
 	vehicle_land_detected_s	_vehicle_land_detected{};
 

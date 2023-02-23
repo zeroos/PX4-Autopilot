@@ -2030,28 +2030,28 @@ void Commander::throwLaunchUpdate()
 	//TODO add tunes
 	static int timer = 0;
 	if(_param_com_throw_en.get()) {
-		if (!_arm_state_machine.isArmed() && _throw_mode_state != ThrowModeState::IDLE) {
+		if (!_arm_state_machine.isArmed() && _throw_launch_state != ThrowLaunchState::IDLE) {
 			PX4_INFO("%s [Throw] %s DISARMED!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
-			_throw_mode_state = ThrowModeState::IDLE;
+			_throw_launch_state = ThrowLaunchState::IDLE;
 			_actuator_armed.lockdown = false;
 		}
 
-		if(_throw_mode_state == ThrowModeState::IDLE && _arm_state_machine.isArmed()) {
+		if(_throw_launch_state == ThrowLaunchState::IDLE && _arm_state_machine.isArmed()) {
 			PX4_INFO("%s [Throw] %s ARMED!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
-			_throw_mode_state = ThrowModeState::ARMED;
+			_throw_launch_state = ThrowLaunchState::ARMED;
 			_actuator_armed.lockdown = true;
 		}
 
-		if(_throw_mode_state == ThrowModeState::ARMED && _vehicle_land_detected.freefall) {
+		if(_throw_launch_state == ThrowLaunchState::ARMED && _vehicle_land_detected.freefall) {
 			PX4_INFO("%s [Throw] %s FLYING!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
-			_throw_mode_state = ThrowModeState::FLYING;
+			_throw_launch_state = ThrowLaunchState::FLYING;
 			_actuator_armed.lockdown = false;
 		}
 		if(timer == 0) {
 			PX4_INFO(
 				"%s [Throw] %s %x|%x|%x",
 				PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET,
-				(int)_throw_mode_state,
+				(int)_throw_launch_state,
 				_actuator_armed.manual_lockdown,
 				_actuator_armed.lockdown
 			);
