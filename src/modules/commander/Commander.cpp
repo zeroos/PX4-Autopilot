@@ -2028,36 +2028,23 @@ void Commander::safetyButtonUpdate()
 void Commander::throwLaunchUpdate()
 {
 	//TODO add tunes
-	static int timer = 0;
 	if(_param_com_throw_en.get()) {
 		if (!_arm_state_machine.isArmed() && _throw_launch_state != ThrowLaunchState::IDLE) {
-			PX4_INFO("%s [Throw] %s DISARMED!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
+			mavlink_log_info(&_mavlink_log_pub, "The vehicle is DISARMED with throw launch enabled. Do NOT throw it.\t");
 			_throw_launch_state = ThrowLaunchState::IDLE;
 			_actuator_armed.lockdown = false;
 		}
 
 		if(_throw_launch_state == ThrowLaunchState::IDLE && _arm_state_machine.isArmed()) {
-			PX4_INFO("%s [Throw] %s ARMED!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
+			mavlink_log_info(&_mavlink_log_pub, "The vehicle is ARMED with throw launch enabled. Throw the vehicle now.\t");
 			_throw_launch_state = ThrowLaunchState::ARMED;
 			_actuator_armed.lockdown = true;
 		}
 
 		if(_throw_launch_state == ThrowLaunchState::ARMED && _vehicle_land_detected.freefall) {
-			PX4_INFO("%s [Throw] %s FLYING!", PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET);
+			PX4_INFO("Throw successful, starting motors.");
 			_throw_launch_state = ThrowLaunchState::FLYING;
 			_actuator_armed.lockdown = false;
-		}
-		if(timer == 0) {
-			PX4_INFO(
-				"%s [Throw] %s %x|%x|%x",
-				PX4_ANSI_COLOR_GREEN, PX4_ANSI_COLOR_RESET,
-				(int)_throw_launch_state,
-				_actuator_armed.manual_lockdown,
-				_actuator_armed.lockdown
-			);
-			timer = 50;
-		}else{
-			timer--;
 		}
 	}
 }
