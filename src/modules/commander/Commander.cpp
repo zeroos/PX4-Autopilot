@@ -2027,7 +2027,6 @@ void Commander::safetyButtonUpdate()
 
 void Commander::throwLaunchUpdate()
 {
-	//TODO add tunes
 	if(_param_com_throw_en.get()) {
 		if (!_arm_state_machine.isArmed() && _throw_launch_state != ThrowLaunchState::IDLE) {
 			mavlink_log_info(&_mavlink_log_pub, "The vehicle is DISARMED with throw launch enabled. Do NOT throw it.\t");
@@ -2105,7 +2104,8 @@ void Commander::updateTunes()
 
 	} else if (_vehicle_status.failsafe && _arm_state_machine.isArmed()) {
 		tune_failsafe(true);
-
+	} else if (_throw_launch_state == ThrowLaunchState::ARMED ) {
+		set_tune(tune_control_s::TUNE_ID_ARMING_WARNING);
 	} else {
 		set_tune(tune_control_s::TUNE_ID_STOP);
 	}
@@ -2165,7 +2165,6 @@ void Commander::handleAutoDisarm()
 			if (_auto_disarm_landed.get_state()) {
 				if (_have_taken_off_since_arming) {
 					disarm(arm_disarm_reason_t::auto_disarm_land);
-
 				} else {
 					disarm(arm_disarm_reason_t::auto_disarm_preflight);
 				}
@@ -2186,9 +2185,9 @@ void Commander::handleAutoDisarm()
 		if (_auto_disarm_killed.get_state()) {
 			if (_actuator_armed.manual_lockdown) {
 				disarm(arm_disarm_reason_t::kill_switch, true);
-
-			} else {
-				//disarm(arm_disarm_reason_t::lockdown, true);
+			} else if (!_param_com_throw_en.get()) {  // don't disarm if throw
+			                                          // launch is enabled
+				disarm(arm_disarm_reason_t::lockdown, true);
 			}
 		}
 
