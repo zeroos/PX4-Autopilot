@@ -2188,6 +2188,7 @@ void Commander::handleAutoDisarm()
 		if (_auto_disarm_killed.get_state()) {
 			if (_actuator_armed.manual_lockdown) {
 				disarm(arm_disarm_reason_t::kill_switch, true);
+
 			} else if (!_param_com_throw_en.get()) {  // don't disarm if throw
 			                                          // launch is enabled
 				disarm(arm_disarm_reason_t::lockdown, true);
