@@ -2104,8 +2104,10 @@ void Commander::updateTunes()
 
 	} else if (_vehicle_status.failsafe && _arm_state_machine.isArmed()) {
 		tune_failsafe(true);
+
 	} else if (_throw_launch_state == ThrowLaunchState::ARMED ) {
 		set_tune(tune_control_s::TUNE_ID_ARMING_WARNING);
+
 	} else {
 		set_tune(tune_control_s::TUNE_ID_STOP);
 	}
