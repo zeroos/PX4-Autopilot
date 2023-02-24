@@ -2165,6 +2165,7 @@ void Commander::handleAutoDisarm()
 			if (_auto_disarm_landed.get_state()) {
 				if (_have_taken_off_since_arming) {
 					disarm(arm_disarm_reason_t::auto_disarm_land);
+
 				} else {
 					disarm(arm_disarm_reason_t::auto_disarm_preflight);
 				}
