@@ -2028,6 +2028,10 @@ void Commander::safetyButtonUpdate()
 void Commander::throwLaunchUpdate()
 {
 	if(_param_com_throw_en.get()) {
+		if (_vehicle_local_position_sub.updated()) {
+			_vehicle_local_position_sub.copy(&_vehicle_local_position);
+		}
+
 		if (!_arm_state_machine.isArmed() && _throw_launch_state != ThrowLaunchState::IDLE) {
 			mavlink_log_info(&_mavlink_log_pub, "The vehicle is DISARMED with throw launch enabled. Do NOT throw it.\t");
 			_throw_launch_state = ThrowLaunchState::IDLE;
@@ -2040,7 +2044,19 @@ void Commander::throwLaunchUpdate()
 			_actuator_armed.lockdown = true;
 		}
 
-		if(_throw_launch_state == ThrowLaunchState::ARMED && _vehicle_land_detected.freefall) {
+		double vehicle_speed_squared = (
+				_vehicle_local_position.vx * _vehicle_local_position.vx +
+				_vehicle_local_position.vy * _vehicle_local_position.vy +
+				_vehicle_local_position.vz * _vehicle_local_position.vz
+		);
+		double min_launch_speed = _param_com_throw_min_speed.get();
+		if(_throw_launch_state == ThrowLaunchState::ARMED && 
+				vehicle_speed_squared >= min_launch_speed*min_launch_speed) {
+			PX4_INFO("Minimum throw speed exceeded; the motors will start when the freefall is detected.");
+			_throw_launch_state = ThrowLaunchState::UNSAFE;
+		}
+
+		if(_throw_launch_state == ThrowLaunchState::UNSAFE && _vehicle_land_detected.freefall) {
 			PX4_INFO("Throw successful, starting motors.");
 			_throw_launch_state = ThrowLaunchState::FLYING;
 			_actuator_armed.lockdown = false;

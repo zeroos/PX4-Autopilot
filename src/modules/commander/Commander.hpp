@@ -199,7 +199,8 @@ private:
 	enum class ThrowLaunchState {
 		IDLE = 0,
 		ARMED = 1,
-		FLYING = 2
+		UNSAFE = 2,
+		FLYING = 3
 	};
 
 	/* Decouple update interval and hysteresis counters, all depends on intervals */
@@ -268,6 +269,7 @@ private:
 	bool _status_changed{true};
 	ThrowLaunchState _throw_launch_state{ThrowLaunchState::IDLE};
 
+	vehicle_local_position_s	_vehicle_local_position{};
 	vehicle_land_detected_s	_vehicle_land_detected{};
 
 	// commander publications
@@ -283,6 +285,7 @@ private:
 	uORB::Subscription					_system_power_sub{ORB_ID(system_power)};
 	uORB::Subscription					_vehicle_command_sub{ORB_ID(vehicle_command)};
 	uORB::Subscription					_vehicle_land_detected_sub{ORB_ID(vehicle_land_detected)};
+	uORB::Subscription					_vehicle_local_position_sub{ORB_ID(vehicle_local_position)};
 	uORB::Subscription					_vtol_vehicle_status_sub{ORB_ID(vtol_vehicle_status)};
 
 	uORB::SubscriptionInterval				_parameter_update_sub{ORB_ID(parameter_update), 1_s};
@@ -335,6 +338,7 @@ private:
 		(ParamInt<px4::params::COM_FLIGHT_UUID>)    _param_flight_uuid,
 		(ParamInt<px4::params::COM_TAKEOFF_ACT>)    _param_takeoff_finished_action,
 		(ParamFloat<px4::params::COM_CPU_MAX>)      _param_com_cpu_max,
-		(ParamBool<px4::params::COM_THROW_EN>)      _param_com_throw_en
+		(ParamBool<px4::params::COM_THROW_EN>)      _param_com_throw_en,
+		(ParamFloat<px4::params::COM_THROW_SPEED>)  _param_com_throw_min_speed
 	)
 };
