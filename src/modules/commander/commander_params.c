@@ -1120,8 +1120,8 @@ PARAM_DEFINE_INT32(COM_THROW_EN, 0);
  * Minimum speed for the throw start
  *
  * When the throw launch is enabled, the drone will only arm after this speed is exceeded before detecting
- * the freefall. This is a safety feature to ensure the drone does not turn on
- * after accidental drop or a rapid movement before the throw.
+ * the freefall. This is a safety feature to ensure the drone does not turn on after accidental drop or 
+ * a rapid movement before the throw.
  *
  * Set to 0 to disable.
  *
@@ -1131,4 +1131,4 @@ PARAM_DEFINE_INT32(COM_THROW_EN, 0);
  * @increment 0.1
  * @unit m/s
  */
-PARAM_DEFINE_FLOAT(COM_THROW_SPEED, 2);
+PARAM_DEFINE_FLOAT(COM_THROW_SPEED, 5);

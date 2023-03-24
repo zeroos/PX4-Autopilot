@@ -197,10 +197,11 @@ private:
 	};
 
 	enum class ThrowLaunchState {
-		IDLE = 0,
-		ARMED = 1,
-		UNSAFE = 2,
-		FLYING = 3
+		DISABLED = 0,
+		IDLE = 1,
+		ARMED = 2,
+		UNSAFE = 3,
+		FLYING = 4
 	};
 
 	/* Decouple update interval and hysteresis counters, all depends on intervals */
@@ -267,7 +268,7 @@ private:
 	bool _was_armed{false};
 	bool _have_taken_off_since_arming{false};
 	bool _status_changed{true};
-	ThrowLaunchState _throw_launch_state{ThrowLaunchState::IDLE};
+	ThrowLaunchState _throw_launch_state{ThrowLaunchState::DISABLED};
 
 	vehicle_local_position_s	_vehicle_local_position{};
 	vehicle_land_detected_s	_vehicle_land_detected{};

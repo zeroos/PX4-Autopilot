@@ -2035,13 +2035,12 @@ void Commander::throwLaunchUpdate()
 		if (!_arm_state_machine.isArmed() && _throw_launch_state != ThrowLaunchState::IDLE) {
 			mavlink_log_info(&_mavlink_log_pub, "The vehicle is DISARMED with throw launch enabled. Do NOT throw it.\t");
 			_throw_launch_state = ThrowLaunchState::IDLE;
-			_actuator_armed.lockdown = false;
+			_actuator_armed.lockdown = true;
 		}
 
 		if(_throw_launch_state == ThrowLaunchState::IDLE && _arm_state_machine.isArmed()) {
 			mavlink_log_info(&_mavlink_log_pub, "The vehicle is ARMED with throw launch enabled. Throw the vehicle now.\t");
 			_throw_launch_state = ThrowLaunchState::ARMED;
-			_actuator_armed.lockdown = true;
 		}
 
 		double vehicle_speed_squared = (
@@ -2060,7 +2059,29 @@ void Commander::throwLaunchUpdate()
 			PX4_INFO("Throw successful, starting motors.");
 			_throw_launch_state = ThrowLaunchState::FLYING;
 			_actuator_armed.lockdown = false;
+			if(_vehicle_control_mode.flag_control_auto_enabled) {
+				PX4_INFO("Throw completed in auto mode, switching to hold.");
+				// if in auto mode, update the loitering position
+				vehicle_command_s vcmd = {};
+
+				// hold current position
+				vcmd.command = vehicle_command_s::VEHICLE_CMD_DO_REPOSITION;
+				vcmd.param1 = -1;
+				vcmd.param2 = 1;
+
+				vcmd.param5 = NAN;
+				vcmd.param6 = NAN;
+				vcmd.param7 = NAN;
+
+				uORB::Publication<vehicle_command_s> vcmd_pub{ORB_ID(vehicle_command)};
+				vcmd.timestamp = hrt_absolute_time();
+				vcmd_pub.publish(vcmd);
+			}
 		}
+	} else if (_throw_launch_state != ThrowLaunchState::DISABLED) {
+		// make sure everything is reset when the throw launch is disabled
+		_throw_launch_state = ThrowLaunchState::DISABLED;
+		_actuator_armed.lockdown = false;
 	}
 }
 
@@ -2344,6 +2365,10 @@ void Commander::control_status_leds(bool changed, const uint8_t battery_warning)
 		if (overload && (time_now_us >= _overload_start + overload_warn_delay)) {
 			led_mode = led_control_s::MODE_BLINK_FAST;
 			led_color = led_control_s::COLOR_PURPLE;
+
+		} else if (_throw_launch_state == ThrowLaunchState::ARMED) {
+			led_mode = led_control_s::MODE_BLINK_FAST;
+			led_color = led_control_s::COLOR_YELLOW;
 
 		} else if (_arm_state_machine.isArmed()) {
 			led_mode = led_control_s::MODE_ON;
