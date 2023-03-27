@@ -2055,7 +2055,7 @@ void Commander::throwLaunchUpdate()
 			_throw_launch_state = ThrowLaunchState::UNSAFE;
 		}
 
-		if(_throw_launch_state == ThrowLaunchState::UNSAFE && _vehicle_land_detected.freefall) {
+		if(_throw_launch_state == ThrowLaunchState::UNSAFE && _vehicle_land_detected.freefall && _vehicle_local_position.vz > 0) {
 			PX4_INFO("Throw successful, starting motors.");
 			_throw_launch_state = ThrowLaunchState::FLYING;
 			_actuator_armed.lockdown = false;
