@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *   Copyright (c) 2015 PX4 Development Team. All rights reserved.
+ *   Copyright (C) 2023 PX4 Development Team. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,24 +32,64 @@
  ****************************************************************************/
 
 /**
- * @file tailsitter_params.c
- * Parameters for vtol attitude controller.
+ * @file Vector4.hpp
  *
- * @author Roman Bapst <bapstroman@gmail.com>
- * @author David Vorsin     <davidvorsin@gmail.com>
+ * 4D vector class.
+ *
+ * @author Matthias Grob <maetugr@gmail.com>
  */
 
-/**
- * Duration of front transition phase 2
- *
- * Time in seconds it should take for the rotors to rotate forward completely from the point
- * when the plane has picked up enough airspeed and is ready to go into fixed wind mode.
- *
- * @unit s
- * @min 0.1
- * @max 5.0
- * @increment 0.01
- * @decimal 3
- * @group VTOL Attitude Control
+#pragma once
 
-PARAM_DEFINE_FLOAT(VT_TRANS_P2_DUR, 0.5f);*/
+#include "math.hpp"
+
+namespace matrix
+{
+
+template <typename Type, size_t M, size_t N>
+class Matrix;
+
+template <typename Type, size_t M>
+class Vector;
+
+template<typename Type>
+class Vector4 : public Vector<Type, 4>
+{
+public:
+	using Matrix41 = Matrix<Type, 4, 1>;
+
+	Vector4() = default;
+
+	Vector4(const Matrix41 &other) :
+		Vector<Type, 4>(other)
+	{
+	}
+
+	explicit Vector4(const Type data_[3]) :
+		Vector<Type, 4>(data_)
+	{
+	}
+
+	Vector4(Type x1, Type x2, Type x3, Type x4)
+	{
+		Vector4 &v(*this);
+		v(0) = x1;
+		v(1) = x2;
+		v(2) = x3;
+		v(3) = x4;
+	}
+
+	template<size_t P, size_t Q>
+	Vector4(const Slice<Type, 4, 1, P, Q> &slice_in) : Vector<Type, 4>(slice_in)
+	{
+	}
+
+	template<size_t P, size_t Q>
+	Vector4(const Slice<Type, 1, 4, P, Q> &slice_in) : Vector<Type, 4>(slice_in)
+	{
+	}
+};
+
+using Vector4f = Vector4<float>;
+
+} // namespace matrix
