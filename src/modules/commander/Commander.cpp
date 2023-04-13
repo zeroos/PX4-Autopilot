@@ -2059,24 +2059,6 @@ void Commander::throwLaunchUpdate()
 			PX4_INFO("Throw successful, starting motors.");
 			_throw_launch_state = ThrowLaunchState::FLYING;
 			_actuator_armed.lockdown = false;
-			if(_vehicle_control_mode.flag_control_auto_enabled) {
-				PX4_INFO("Throw completed in auto mode, switching to hold.");
-				// if in auto mode, update the loitering position
-				vehicle_command_s vcmd = {};
-
-				// hold current position
-				vcmd.command = vehicle_command_s::VEHICLE_CMD_DO_REPOSITION;
-				vcmd.param1 = -1;
-				vcmd.param2 = 1;
-
-				vcmd.param5 = NAN;
-				vcmd.param6 = NAN;
-				vcmd.param7 = NAN;
-
-				uORB::Publication<vehicle_command_s> vcmd_pub{ORB_ID(vehicle_command)};
-				vcmd.timestamp = hrt_absolute_time();
-				vcmd_pub.publish(vcmd);
-			}
 		}
 	} else if (_throw_launch_state != ThrowLaunchState::DISABLED) {
 		// make sure everything is reset when the throw launch is disabled
