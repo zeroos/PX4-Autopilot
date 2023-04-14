@@ -2060,6 +2060,7 @@ void Commander::throwLaunchUpdate()
 			_throw_launch_state = ThrowLaunchState::FLYING;
 			_actuator_armed.lockdown = false;
 		}
+
 	} else if (_throw_launch_state != ThrowLaunchState::DISABLED) {
 		// make sure everything is reset when the throw launch is disabled
 		_throw_launch_state = ThrowLaunchState::DISABLED;
@@ -2183,7 +2184,10 @@ void Commander::handleAutoDisarm()
 				_auto_disarm_landed.set_state_and_update(true, hrt_absolute_time());
 			}
 
-			if (_auto_disarm_landed.get_state()) {
+			const bool throw_launch_in_progress = (_throw_launch_state == ThrowLaunchState::ARMED 
+							|| _throw_launch_state == ThrowLaunchState::UNSAFE);
+
+			if (_auto_disarm_landed.get_state() && !throw_launch_in_progress) {
 				if (_have_taken_off_since_arming) {
 					disarm(arm_disarm_reason_t::auto_disarm_land);
 
